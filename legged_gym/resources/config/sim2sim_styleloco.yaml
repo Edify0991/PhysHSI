@@ -1,0 +1,188 @@
+sim:
+  model_path: ../robots/g1/urdf/g1_29dof.urdf
+  timestep: 0.002
+  decimation: 4
+  duration_s: 15.0
+  render: false
+  backend: mujoco
+
+policy:
+  policy_path: ../../logs/exported/policies/policy_name.pt
+  policy_type: jit
+  device: cpu
+
+obs:
+  actor_history: 6
+  command: [0.8, 0.0, 0.0]
+  obs_scales:
+    lin_vel: 2.0
+    ang_vel: 0.25
+    dof_pos: 1.0
+    dof_vel: 0.05
+
+robot:
+  body_name: pelvis
+  end_effector_body_names:
+    - left_hand_palm_link
+    - right_hand_palm_link
+    - left_ankle_pitch_link
+    - right_ankle_pitch_link
+    - head_link
+
+  joint_names:
+    - left_hip_pitch_joint
+    - left_hip_roll_joint
+    - left_hip_yaw_joint
+    - left_knee_joint
+    - left_ankle_pitch_joint
+    - left_ankle_roll_joint
+    - right_hip_pitch_joint
+    - right_hip_roll_joint
+    - right_hip_yaw_joint
+    - right_knee_joint
+    - right_ankle_pitch_joint
+    - right_ankle_roll_joint
+    - waist_yaw_joint
+    - waist_roll_joint
+    - waist_pitch_joint
+    - left_shoulder_pitch_joint
+    - left_shoulder_roll_joint
+    - left_shoulder_yaw_joint
+    - left_elbow_joint
+    - left_wrist_roll_joint
+    - left_wrist_pitch_joint
+    - left_wrist_yaw_joint
+    - right_shoulder_pitch_joint
+    - right_shoulder_roll_joint
+    - right_shoulder_yaw_joint
+    - right_elbow_joint
+    - right_wrist_roll_joint
+    - right_wrist_pitch_joint
+    - right_wrist_yaw_joint
+
+  actuator_names:
+    - left_hip_pitch_joint
+    - left_hip_roll_joint
+    - left_hip_yaw_joint
+    - left_knee_joint
+    - left_ankle_pitch_joint
+    - left_ankle_roll_joint
+    - right_hip_pitch_joint
+    - right_hip_roll_joint
+    - right_hip_yaw_joint
+    - right_knee_joint
+    - right_ankle_pitch_joint
+    - right_ankle_roll_joint
+    - waist_yaw_joint
+    - waist_roll_joint
+    - waist_pitch_joint
+    - left_shoulder_pitch_joint
+    - left_shoulder_roll_joint
+    - left_shoulder_yaw_joint
+    - left_elbow_joint
+    - left_wrist_roll_joint
+    - left_wrist_pitch_joint
+    - left_wrist_yaw_joint
+    - right_shoulder_pitch_joint
+    - right_shoulder_roll_joint
+    - right_shoulder_yaw_joint
+    - right_elbow_joint
+    - right_wrist_roll_joint
+    - right_wrist_pitch_joint
+    - right_wrist_yaw_joint
+
+  default_joint_pos:
+    - -0.1
+    - 0.0
+    - 0.0
+    - 0.3
+    - -0.2
+    - 0.0
+    - -0.1
+    - 0.0
+    - 0.0
+    - 0.3
+    - -0.2
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.1
+    - 0.0
+    - 1.2
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - -0.1
+    - 0.0
+    - 1.2
+    - 0.0
+    - 0.0
+    - 0.0
+
+  kp:
+    - 150
+    - 150
+    - 150
+    - 300
+    - 40
+    - 40
+    - 150
+    - 150
+    - 150
+    - 300
+    - 40
+    - 40
+    - 300
+    - 300
+    - 300
+    - 200
+    - 200
+    - 200
+    - 100
+    - 20
+    - 20
+    - 20
+    - 200
+    - 200
+    - 200
+    - 100
+    - 20
+    - 20
+    - 20
+
+  kd:
+    - 2
+    - 2
+    - 2
+    - 4
+    - 1
+    - 1
+    - 2
+    - 2
+    - 2
+    - 4
+    - 1
+    - 1
+    - 4
+    - 4
+    - 4
+    - 3
+    - 3
+    - 3
+    - 1
+    - 0.5
+    - 0.5
+    - 0.5
+    - 3
+    - 3
+    - 3
+    - 1
+    - 0.5
+    - 0.5
+    - 0.5
+
+  torque_limit: []
+  action_scale: 0.25
