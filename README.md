@@ -208,3 +208,40 @@ If you find our work helpful, please cite:
 
 The PhysHSI code is licensed under the <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0 International License</a> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>.
 Commercial use is not allowed without explicit authorization.
+
+## 🔁 Sim2Sim Evaluation in MuJoCo / MuJoCo Playground
+
+为了进行 IsaacGym -> MuJoCo 的策略迁移验证，本仓库新增了一个统一评估脚本：
+
+```bash
+python legged_gym/scripts/sim2sim_mujoco.py \
+  --task standup \
+  --policy logs/exported/policies/policy_name.pt \
+  --mjcf /path/to/scene.xml
+```
+
+该脚本完成以下关键环节：
+- 在 MuJoCo 中加载机器人与场景（`--mjcf`）；
+- 按 PhysHSI 训练时的观测定义，构建**历史堆叠观测**（含本体感知 + 任务观测）；
+- 加载 TorchScript 策略并做前向推理；
+- 使用和 IsaacGym 配置一致的 `action_scale + PD` 控制逻辑输出关节力矩；
+- 支持 `standup/sitdown/liedown/carrybox/styleloco_*` 六类任务；
+- 支持无渲染评估（`--headless`）。
+
+### 依赖
+
+```bash
+pip install mujoco
+```
+
+### 任务相关参数
+
+- `standup/sitdown/liedown`：
+  - `--chair_body` 指定椅子在 MJCF 中的 body 名称；
+  - `standup` 额外需要 `--marker_pos x y z`。
+- `carrybox`：
+  - `--box_body`、`--box_size`、`--goal_pos`。
+- `styleloco_*`：
+  - 使用 `--command_x --command_y --command_yaw` 指令速度。
+
+如果你使用 `mujoco_playground`，只需保证其底层模型能导出/访问对应 MJCF body 名称，脚本即可复用相同评估流程。
