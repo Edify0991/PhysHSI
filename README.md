@@ -138,6 +138,50 @@ python legged_gym/scripts/play.py --task [task_name] --resume_path [ckpt_path]
 > 
 > If you prefer to use **Weights & Biases (wandb)**, please enable it in the corresponding `[task_name]_config.py` file and set the appropriate `wandb_entity` for your account.
 
+
+## 🔁 Sim2Sim Validation in MuJoCo / MuJoCo Playground
+
+This repo now includes a MuJoCo-based sim2sim evaluation pipeline, so you can replay a trained IsaacGym policy in MuJoCo (or in a MuJoCo-Playground-compatible setup).
+
+### 1) Install dependencies
+
+```bash
+pip install mujoco pyyaml
+```
+
+### 2) Export policy (JIT)
+
+Use `play.py` and enable export:
+
+```bash
+cd legged_gym
+python legged_gym/scripts/play.py --task styleloco_dinosaur --resume_path resources/ckpt/styleloco_dinosaur.pt
+```
+
+Then set `policy.policy_path` in `resources/config/sim2sim_styleloco.yaml` to your exported model path (for example `logs/exported/policies/policy_name.pt`).
+
+### 3) Configure MuJoCo model and mappings
+
+Edit `legged_gym/resources/config/sim2sim_styleloco.yaml`:
+- `sim.model_path`: your MJCF/URDF path.
+- `robot.joint_names` / `robot.actuator_names`: must match MuJoCo names.
+- `robot.body_name` and `robot.end_effector_body_names`: used to rebuild policy observations.
+- `kp`, `kd`, `action_scale`: should align with IsaacGym training settings.
+
+### 4) Run sim2sim
+
+```bash
+python legged_gym/scripts/sim2sim_mujoco.py --config resources/config/sim2sim_styleloco.yaml --backend mujoco
+```
+
+Render with viewer:
+
+```bash
+python legged_gym/scripts/sim2sim_mujoco.py --config resources/config/sim2sim_styleloco.yaml --backend mujoco --render
+```
+
+> Note: selecting `--backend mujoco_playground` currently reuses the same MuJoCo stepping pipeline and config interface, so you can integrate it into MuJoCo Playground scenes incrementally.
+
 ## 👏 Acknowledgements
 
 This repository is built upon the support and contributions of the following open-source projects. Special thanks to:
